@@ -5,14 +5,15 @@
 
 namespace Pulsar
 {
-	void Logger::LogBuffer()
+	void Logger::LogBuffer(LogLevel level)
 	{
 		for (FormatedLogger log : m_outputStreams)
 		{
-			for (PrintFunc printer : log.m_printers)
-			{
-				printer(*log.m_outputStream, m_outputBuffer);
-			}
+			if(((uint8_t)log.m_levels & (uint8_t)level) == (uint8_t)level)
+				for (PrintFunc printer : log.m_printers)
+				{
+					printer(*log.m_outputStream, m_outputBuffer);
+				}
 		}
 		m_outputBuffer.str("");
 	}

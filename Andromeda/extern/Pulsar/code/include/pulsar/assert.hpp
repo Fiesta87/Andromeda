@@ -23,7 +23,7 @@ namespace Pulsar
 
 		AssertModule()
 		{
-			m_logger.AddOutputStream(std::cerr, &AssertLogPrinter);
+			m_logger.AddOutputStream(std::cerr, LogLevel::All, &AssertLogPrinter);
 		}
 
 		template<typename... Printables>

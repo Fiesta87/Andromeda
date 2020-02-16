@@ -11,18 +11,18 @@ namespace Carbon
 	{
 		Vector3 v;
 		
-		TestAssert(v.X == 0.0f);
-		TestAssert(v.Y == 0.0f);
-		TestAssert(v.Z == 0.0f);
+		TestAssertEquals(v.X, 0.0f);
+		TestAssertEquals(v.Y, 0.0f);
+		TestAssertEquals(v.Z, 0.0f);
 	};
 
 	TEST_ADD_UNITTEST(ConstructorWithParameters)
 	{
 		Vector3 v(1.0f, 2.0f, 3.0f);
 
-		TestAssert(v.X == 1.0f);
-		TestAssert(v.Y == 2.0f);
-		TestAssert(v.Z == 3.0f);
+		TestAssertEquals(v.X, 1.0f);
+		TestAssertEquals(v.Y, 2.0f);
+		TestAssertEquals(v.Z, 3.0f);
 	};
 
 	TEST_END_TESTMODULE(Vector3)

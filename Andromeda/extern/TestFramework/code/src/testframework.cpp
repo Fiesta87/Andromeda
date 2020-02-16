@@ -6,13 +6,22 @@ namespace TestFramework
 		: m_name(name)
 		, m_func(nullptr)
 		, m_module(module)
+		, m_testCount(0)
+		, m_failureCount(0)
 	{}
 
-	int UnitTest::Run()
+	void UnitTest::Run()
 	{
-		int failureCount = 0;
-		m_func(failureCount, this);
-		return failureCount;
+		Logger().Log(MakeLogLevel(TestLogLevel::Step, TestLogLevel::UnitTest),
+			"		Start Unit Test ", m_name);
+
+		m_func(this);
+
+		Logger().Log(MakeLogLevel(TestLogLevel::Step, TestLogLevel::UnitTest),
+			"		End Unit Test ", m_name);
+
+		Logger().Log(MakeLogLevel(TestLogLevel::Result, TestLogLevel::UnitTest),
+			"		Unit Test ", m_name, " result : ", m_failureCount, " tests failed out of ", m_testCount, " total tests");
 	}
 
 	Pulsar::Logger& UnitTest::Logger()
@@ -20,18 +29,30 @@ namespace TestFramework
 		return m_module->Logger();
 	}
 
-	TestModule::TestModule(TestSuite* suite)
+	TestModule::TestModule(TestSuite* suite, const char* name)
 		: m_suite(suite)
+		, m_name(name)
+		, m_testCount(0)
+		, m_failureCount(0)
 	{}
 
-	int TestModule::Run()
+	void TestModule::Run()
 	{
-		int result = 0;
+		Logger().Log(MakeLogLevel(TestLogLevel::Step, TestLogLevel::Module),
+			"	Start Test Module ", m_name);
+
 		for (UnitTest test : m_tests)
 		{
-			result += test.Run();
+			test.Run();
+			m_testCount += test.m_testCount;
+			m_failureCount += test.m_failureCount;
 		}
-		return result;
+
+		Logger().Log(MakeLogLevel(TestLogLevel::Step, TestLogLevel::Module),
+			"	End Test Module ", m_name);
+
+		Logger().Log(MakeLogLevel(TestLogLevel::Result, TestLogLevel::Module),
+			"	Module ", m_name, " result : ", m_failureCount, " tests failed out of ", m_testCount, " total tests");
 	}
 
 	Pulsar::Logger& TestModule::Logger()
@@ -39,9 +60,12 @@ namespace TestFramework
 		return m_suite->Logger();
 	}
 
-	TestSuite::TestSuite()
+	TestSuite::TestSuite(const char* name, TestLogLevel levels)
+		: m_name(name)
+		, m_testCount(0)
+		, m_failureCount(0)
 	{
-		m_logger.AddOutputStream(std::cout, &Pulsar::DefaultPrinter);
+		m_logger.AddOutputStream(std::cout, (Pulsar::LogLevel)levels, &Pulsar::DefaultPrinter);
 	}
 
 	void TestSuite::AddTestModule(TestModule& module)
@@ -49,14 +73,23 @@ namespace TestFramework
 		m_modules.push_back(&module);
 	}
 
-	int TestSuite::Run()
+	void TestSuite::Run()
 	{
-		int result = 0;
+		Logger().Log(MakeLogLevel(TestLogLevel::Step, TestLogLevel::Suite),
+			"Start Test Suite ", m_name);
+
 		for (TestModule* module : m_modules)
 		{
-			result += module->Run();
+			module->Run();
+			m_testCount += module->m_testCount;
+			m_failureCount += module->m_failureCount;
 		}
-		return result;
+
+		Logger().Log(MakeLogLevel(TestLogLevel::Step, TestLogLevel::Suite),
+			"End Test Suite ", m_name);
+
+		Logger().Log(MakeLogLevel(TestLogLevel::Result, TestLogLevel::Suite),
+			"Suite ", m_name, " result : ", m_failureCount, " tests failed out of ", m_testCount, " total tests");
 	}
 
 	Pulsar::Logger& TestSuite::Logger()
