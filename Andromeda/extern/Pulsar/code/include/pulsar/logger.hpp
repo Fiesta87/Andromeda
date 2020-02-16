@@ -50,6 +50,9 @@ namespace Pulsar
 			formatedLogger.m_printers.push_back(printer);
 		}
 
+		void PrepareBuffer()
+		{}
+
 		template<typename Printable>
 		void PrepareBuffer(Printable printable)
 		{

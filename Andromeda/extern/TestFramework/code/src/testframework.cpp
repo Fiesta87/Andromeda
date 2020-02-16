@@ -50,6 +50,6 @@ namespace TestFramework
 
 		assertModule.Assert(false, "assert test, ", "yolo ", 42);*/
 
-		PULSAR_ASSERT(false, "assert test, ", "yolo ", 42);
+		PULSAR_ASSERT(false == true, "This assert ", "has to fail.");
 	}
 }
