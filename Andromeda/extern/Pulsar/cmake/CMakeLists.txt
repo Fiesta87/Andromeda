@@ -15,7 +15,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # set the list of sources files to build
 set(CMVAR_SRCFILES
-	"${CMVAR_DIR_SRC}/pulsar.cpp"
+	"${CMVAR_DIR_SRC}/pulsar/assert.cpp"
 	"${CMVAR_DIR_SRC}/pulsar/logger.cpp"
 	)
 

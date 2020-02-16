@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include <pulsar.hpp>
+#include <pulsar/assert.hpp>
 
 namespace TestFramework
 {
@@ -19,7 +19,7 @@ namespace TestFramework
 
 	void DoTestStuff()
 	{
-		Pulsar::Logger logger;
+		/*Pulsar::Logger logger;
 
 		TestLogger::data = 99;
 
@@ -44,6 +44,12 @@ namespace TestFramework
 		{
 			logger.Log("Perf test : ", i);
 		}
-		__debugbreak();
+		__debugbreak();*/
+
+		/*Pulsar::AssertModule assertModule;
+
+		assertModule.Assert(false, "assert test, ", "yolo ", 42);*/
+
+		PULSAR_ASSERT(false, "assert test, ", "yolo ", 42);
 	}
 }

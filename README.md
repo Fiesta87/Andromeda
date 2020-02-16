@@ -28,7 +28,7 @@ The graphics engine.
 
 * __Pulsar__
 
-Logging system.
+Provide a customizable Logging system and basics assert functionnalities.
 
 * __TestFramework__
 
