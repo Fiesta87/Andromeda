@@ -1,0 +1,4 @@
+
+CreamyEngine will output a static lib.
+
+"GameName" project should implement main method and provide callbacks to interprete additionnal data.
