@@ -10,9 +10,9 @@ namespace TestFramework
 	{
 		static uint64_t data;
 
-		static void Print(std::ostream* os, const char* text)
+		static void Print(std::ostream& outputStream, std::ostringstream& buffer)
 		{
-			*os << text << data << std::endl;
+			outputStream << buffer.str() << data << std::endl;
 		}
 	};
 	uint64_t TestLogger::data = 42;
@@ -23,10 +23,10 @@ namespace TestFramework
 
 		TestLogger::data = 99;
 
-		logger.AddOutputStream(&std::cout, &Pulsar::DefaultPrinter, &Pulsar::TimedPrinter,
-			[](std::ostream* os, const char* text)
+		logger.AddOutputStream(std::cout, &Pulsar::DefaultPrinter, &Pulsar::TimedPrinter,
+			[](std::ostream& outputStream, std::ostringstream& buffer)
 			{
-				*os << text << text << std::endl;
+				outputStream << buffer.str() << buffer.str() << std::endl;
 			},
 			&Pulsar::TimePrinter, &Pulsar::SeparatorPrinter, &Pulsar::DefaultPrinter,
 			& TestLogger::Print);
@@ -34,5 +34,16 @@ namespace TestFramework
 		logger.Log("azertyuiop");
 		TestLogger::data = 55;
 		logger.Log("zozo");
+
+		logger.AddOutputStream(std::cout, &Pulsar::DefaultPrinter);
+
+		logger.Log("test ", 1, " Hiya !!! ", 5.68f);
+		logger.Log("Pour le plaisir ! ", 42);
+
+		for (int i = 0; i < 10000; i++)
+		{
+			logger.Log("Perf test : ", i);
+		}
+		__debugbreak();
 	}
 }
