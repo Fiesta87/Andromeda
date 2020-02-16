@@ -4,6 +4,9 @@
 
 int main(int argc, char* argv[])
 {
-	TestFramework::DoTestStuff();
-	return 0;
+	TEST_BEGIN_TESTSUITE(Carbon);
+
+	TEST_ADD_TESTMODULE(Vector3, Carbon);
+
+	TEST_END_TESTSUITE(Carbon);
 }

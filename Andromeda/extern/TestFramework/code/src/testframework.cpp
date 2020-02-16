@@ -1,55 +1,66 @@
 #include <testframework.hpp>
 
-#include <iostream>
-
-#include <pulsar/assert.hpp>
-
 namespace TestFramework
 {
-	struct TestLogger
+	UnitTest::UnitTest(const char* name, TestModule* module)
+		: m_name(name)
+		, m_func(nullptr)
+		, m_module(module)
+	{}
+
+	int UnitTest::Run()
 	{
-		static uint64_t data;
+		int failureCount = 0;
+		m_func(failureCount, this);
+		return failureCount;
+	}
 
-		static void Print(std::ostream& outputStream, std::ostringstream& buffer)
-		{
-			outputStream << buffer.str() << data << std::endl;
-		}
-	};
-	uint64_t TestLogger::data = 42;
-
-	void DoTestStuff()
+	Pulsar::Logger& UnitTest::Logger()
 	{
-		/*Pulsar::Logger logger;
+		return m_module->Logger();
+	}
 
-		TestLogger::data = 99;
+	TestModule::TestModule(TestSuite* suite)
+		: m_suite(suite)
+	{}
 
-		logger.AddOutputStream(std::cout, &Pulsar::DefaultPrinter, &Pulsar::TimedPrinter,
-			[](std::ostream& outputStream, std::ostringstream& buffer)
-			{
-				outputStream << buffer.str() << buffer.str() << std::endl;
-			},
-			&Pulsar::TimePrinter, &Pulsar::SeparatorPrinter, &Pulsar::DefaultPrinter,
-			& TestLogger::Print);
-
-		logger.Log("azertyuiop");
-		TestLogger::data = 55;
-		logger.Log("zozo");
-
-		logger.AddOutputStream(std::cout, &Pulsar::DefaultPrinter);
-
-		logger.Log("test ", 1, " Hiya !!! ", 5.68f);
-		logger.Log("Pour le plaisir ! ", 42);
-
-		for (int i = 0; i < 10000; i++)
+	int TestModule::Run()
+	{
+		int result = 0;
+		for (UnitTest test : m_tests)
 		{
-			logger.Log("Perf test : ", i);
+			result += test.Run();
 		}
-		__debugbreak();*/
+		return result;
+	}
 
-		/*Pulsar::AssertModule assertModule;
+	Pulsar::Logger& TestModule::Logger()
+	{
+		return m_suite->Logger();
+	}
 
-		assertModule.Assert(false, "assert test, ", "yolo ", 42);*/
+	TestSuite::TestSuite()
+	{
+		m_logger.AddOutputStream(std::cout, &Pulsar::DefaultPrinter);
+	}
 
-		PULSAR_ASSERT(false == true, "This assert ", "has to fail.");
+	void TestSuite::AddTestModule(TestModule& module)
+	{
+		m_modules.push_back(&module);
+	}
+
+	int TestSuite::Run()
+	{
+		int result = 0;
+		for (TestModule* module : m_modules)
+		{
+			result += module->Run();
+		}
+		return result;
+	}
+
+	Pulsar::Logger& TestSuite::Logger()
+	{
+		return m_logger;
 	}
 }
