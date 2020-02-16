@@ -12,7 +12,7 @@ Clone this repository and open the main folder with VS2019.
 Sub-projects
 ------------
 
-* ###Carbon
+* __Carbon__
 
 Contains all the mathematics of the engine.
 You can find here :
@@ -22,14 +22,14 @@ You can find here :
 	* Quaternion
 	* Transform
 
-* ###Photon
+* __Photon__
 
 The graphics engine.
 
-* ###Pulsar
+* __Pulsar__
 
 Logging system.
 
-* ###TestFramework
+* __TestFramework__
 
 Basic test functionnalities used by the others project to implement theirs unit tests.
