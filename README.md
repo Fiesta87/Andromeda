@@ -28,8 +28,8 @@ The graphics engine.
 
 * __Pulsar__
 
-Provide a customizable Logging system and basics assert functionnalities.
+Provide basics frameworks for the engine :
 
-* __TestFramework__
-
-Basic test functionnalities used by the others project to implement theirs unit tests.
+	* A friendly test framework to implement unit test for other projects
+	* A customizable Logging system
+	* Basics assert functionnalities
