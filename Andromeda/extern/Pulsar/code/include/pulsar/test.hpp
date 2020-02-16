@@ -8,8 +8,8 @@
 // TEST SUITE GENERATION MACROS //
 //////////////////////////////////
 
-#define TEST_BEGIN_TESTSUITE(suiteName)	TEST_BEGIN_TESTSUITE_LOGCONF(suiteName, TestFramework::TestLogLevel::All)
-#define TEST_BEGIN_TESTSUITE_LOGCONF(suiteName, logLevels)	TestFramework::TestSuite suiteName##TestSuite(#suiteName, logLevels)
+#define TEST_BEGIN_TESTSUITE(suiteName)	TEST_BEGIN_TESTSUITE_LOGCONF(suiteName, Pulsar::TestLogLevel::All)
+#define TEST_BEGIN_TESTSUITE_LOGCONF(suiteName, logLevels)	Pulsar::TestSuite suiteName##TestSuite(#suiteName, logLevels)
 
 #define TEST_END_TESTSUITE(suiteName) \
 suiteName##TestSuite.Run();\
@@ -21,11 +21,11 @@ return suiteName##TestSuite.m_failureCount;
 ///////////////////////////////////
 
 #define TEST_BEGIN_TESTMODULE(moduleName) \
-class moduleName##Tests : public TestFramework::TestModule\
+class moduleName##Tests : public Pulsar::TestModule\
 {\
 public:\
-	moduleName##Tests(TestFramework::TestSuite* suite)\
-		: TestFramework::TestModule(suite, #moduleName)\
+	moduleName##Tests(Pulsar::TestSuite* suite)\
+		: Pulsar::TestModule(suite, #moduleName)\
 	{
 
 
@@ -44,9 +44,9 @@ suiteName##TestSuite.AddTestModule(moduleName##TestModule)
 /////////////////////////////////
 
 #define TEST_ADD_UNITTEST(testName) \
-TestFramework::UnitTest test##testName(#testName, this);\
+Pulsar::UnitTest test##testName(#testName, this);\
 m_tests.push_back(test##testName);\
-m_tests[m_tests.size()-1].m_func = [](TestFramework::UnitTest* test_ctx)->void
+m_tests[m_tests.size()-1].m_func = [](Pulsar::UnitTest* test_ctx)->void
 
 
 //////////////////////////////////////
@@ -57,23 +57,23 @@ m_tests[m_tests.size()-1].m_func = [](TestFramework::UnitTest* test_ctx)->void
 test_ctx->m_testCount++;\
 if(!(condition))\
 {\
-	test_ctx->Logger().Log(MakeLogLevel(TestFramework::TestLogLevel::UnitTestFailure), "			Unit Test \"", test_ctx->GetName(), "\" FAIL"); \
+	test_ctx->Logger().Log(MakeLogLevel(Pulsar::TestLogLevel::UnitTestFailure), "			Unit Test \"", test_ctx->GetName(), "\" FAIL"); \
 	test_ctx->m_failureCount++;\
 }\
 else\
-	test_ctx->Logger().Log(MakeLogLevel(TestFramework::TestLogLevel::UnitTestSuccess), "			Unit Test \"", test_ctx->GetName(), "\" SUCCESS");
+	test_ctx->Logger().Log(MakeLogLevel(Pulsar::TestLogLevel::UnitTestSuccess), "			Unit Test \"", test_ctx->GetName(), "\" SUCCESS");
 
 #define TestAssertEquals(result, expected) \
 test_ctx->m_testCount++;\
 if(result != expected)\
 {\
-	test_ctx->Logger().Log(MakeLogLevel(TestFramework::TestLogLevel::UnitTestFailure), "			Unit Test \"", test_ctx->GetName(), "\" FAIL : ", #result, " has value \"", result, "\" but was expected to be \"", expected, "\""); \
+	test_ctx->Logger().Log(MakeLogLevel(Pulsar::TestLogLevel::UnitTestFailure), "			Unit Test \"", test_ctx->GetName(), "\" FAIL : ", #result, " has value \"", result, "\" but was expected to be \"", expected, "\""); \
 	test_ctx->m_failureCount++;\
 }\
 else\
-	test_ctx->Logger().Log(MakeLogLevel(TestFramework::TestLogLevel::UnitTestSuccess), "			Unit Test \"", test_ctx->GetName(), "\" SUCCESS");
+	test_ctx->Logger().Log(MakeLogLevel(Pulsar::TestLogLevel::UnitTestSuccess), "			Unit Test \"", test_ctx->GetName(), "\" SUCCESS");
 
-namespace TestFramework
+namespace Pulsar
 {
 	enum class TestLogLevel : uint8_t
 	{
@@ -110,7 +110,7 @@ namespace TestFramework
 	public:
 		UnitTest(const char* name, TestModule* module);
 		void Run();
-		Pulsar::Logger& Logger();
+		Logger& Logger();
 		const char* GetName() { return m_name; }
 		UnitTestFunc m_func;
 		int m_testCount;
@@ -126,7 +126,7 @@ namespace TestFramework
 	public:
 		TestModule(TestSuite* suite, const char* name);
 		void Run();
-		Pulsar::Logger& Logger();
+		Logger& Logger();
 		int m_testCount;
 		int m_failureCount;
 
@@ -142,7 +142,7 @@ namespace TestFramework
 		TestSuite(const char* name, TestLogLevel levels);
 		void AddTestModule(TestModule& module);
 		void Run();
-		Pulsar::Logger& Logger();
+		Logger& Logger();
 		int m_testCount;
 		int m_failureCount;
 

@@ -41,7 +41,6 @@ set(CMVAR_DIR_TESTINCLUDE "${CMVAR_DIR_TEST}/include")
 
 set(CMVAR_TESTSRCFILES
 	"${CMVAR_DIR_TESTSRC}/main_test.cpp"
-	"${CMVAR_DIR_TESTSRC}/vector3_test.cpp"
 	)
 
 # create test executable
@@ -49,7 +48,7 @@ add_executable(CarbonTest ${CMVAR_TESTSRCFILES})
 
 # dependencies
 target_link_libraries(CarbonTest Carbon)
-target_link_libraries(CarbonTest TestFramework)
+target_link_libraries(CarbonTest Pulsar)
 
 # set include directory
 target_include_directories(CarbonTest PUBLIC ${CMVAR_DIR_TESTINCLUDE})

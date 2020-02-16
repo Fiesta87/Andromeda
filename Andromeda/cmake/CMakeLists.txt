@@ -21,7 +21,6 @@ set(CMVAR_SRCFILES
 
 # add extern references
 add_subdirectory("${CMVAR_DIR_EXTERN}/Pulsar/cmake" "${CMVAR_DIR_EXTERN}/Pulsar/cmake/out")
-add_subdirectory("${CMVAR_DIR_EXTERN}/TestFramework/cmake" "${CMVAR_DIR_EXTERN}/TestFramework/cmake/out")
 add_subdirectory("${CMVAR_DIR_EXTERN}/Carbon/cmake" "${CMVAR_DIR_EXTERN}/Carbon/cmake/out")
 
 # define static lib as output
@@ -32,3 +31,4 @@ target_include_directories(Andromeda PUBLIC ${CMVAR_DIR_INCLUDE})
 
 # dependencies
 target_link_libraries(Andromeda Pulsar)
+target_link_libraries(Andromeda Carbon)

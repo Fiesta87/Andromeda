@@ -17,6 +17,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMVAR_SRCFILES
 	"${CMVAR_DIR_SRC}/pulsar/assert.cpp"
 	"${CMVAR_DIR_SRC}/pulsar/logger.cpp"
+	"${CMVAR_DIR_SRC}/pulsar/test.cpp"
 	)
 
 # define static lib as output

@@ -1,6 +1,6 @@
-#include <testframework.hpp>
+#include <pulsar/test.hpp>
 
-namespace TestFramework
+namespace Pulsar
 {
 	UnitTest::UnitTest(const char* name, TestModule* module)
 		: m_name(name)
@@ -24,7 +24,7 @@ namespace TestFramework
 			"		Unit Test ", m_name, " result : ", m_failureCount, " tests failed out of ", m_testCount, " total tests");
 	}
 
-	Pulsar::Logger& UnitTest::Logger()
+	Logger& UnitTest::Logger()
 	{
 		return m_module->Logger();
 	}
@@ -55,7 +55,7 @@ namespace TestFramework
 			"	Module ", m_name, " result : ", m_failureCount, " tests failed out of ", m_testCount, " total tests");
 	}
 
-	Pulsar::Logger& TestModule::Logger()
+	Logger& TestModule::Logger()
 	{
 		return m_suite->Logger();
 	}
@@ -65,7 +65,7 @@ namespace TestFramework
 		, m_testCount(0)
 		, m_failureCount(0)
 	{
-		m_logger.AddOutputStream(std::cout, (Pulsar::LogLevel)levels, &Pulsar::DefaultPrinter);
+		m_logger.AddOutputStream(std::cout, (LogLevel)levels, &DefaultPrinter);
 	}
 
 	void TestSuite::AddTestModule(TestModule& module)
@@ -92,7 +92,7 @@ namespace TestFramework
 			"Suite ", m_name, " result : ", m_failureCount, " tests failed out of ", m_testCount, " total tests");
 	}
 
-	Pulsar::Logger& TestSuite::Logger()
+	Logger& TestSuite::Logger()
 	{
 		return m_logger;
 	}
