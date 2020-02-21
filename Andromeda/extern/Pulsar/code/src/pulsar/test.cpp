@@ -12,15 +12,15 @@ namespace Pulsar
 
 	void UnitTest::Run()
 	{
-		Logger().Log(MakeLogLevel(TestLogLevel::Step, TestLogLevel::UnitTest),
+		Logger().Log(MakeLogLevel(TestLogLevel::UnitTestStep),
 			"		Start Unit Test ", m_name);
 
 		m_func(this);
 
-		Logger().Log(MakeLogLevel(TestLogLevel::Step, TestLogLevel::UnitTest),
+		Logger().Log(MakeLogLevel(TestLogLevel::UnitTestStep),
 			"		End Unit Test ", m_name);
 
-		Logger().Log(MakeLogLevel(TestLogLevel::Result, TestLogLevel::UnitTest),
+		Logger().Log(MakeLogLevel(TestLogLevel::UnitTestResult),
 			"		Unit Test ", m_name, " result : ", m_failureCount, " tests failed out of ", m_testCount, " total tests");
 	}
 
@@ -38,7 +38,7 @@ namespace Pulsar
 
 	void TestModule::Run()
 	{
-		Logger().Log(MakeLogLevel(TestLogLevel::Step, TestLogLevel::Module),
+		Logger().Log(MakeLogLevel(TestLogLevel::ModuleStep),
 			"	Start Test Module ", m_name);
 
 		for (UnitTest test : m_tests)
@@ -48,10 +48,10 @@ namespace Pulsar
 			m_failureCount += test.m_failureCount;
 		}
 
-		Logger().Log(MakeLogLevel(TestLogLevel::Step, TestLogLevel::Module),
+		Logger().Log(MakeLogLevel(TestLogLevel::ModuleStep),
 			"	End Test Module ", m_name);
 
-		Logger().Log(MakeLogLevel(TestLogLevel::Result, TestLogLevel::Module),
+		Logger().Log(MakeLogLevel(TestLogLevel::ModuleResult),
 			"	Module ", m_name, " result : ", m_failureCount, " tests failed out of ", m_testCount, " total tests");
 	}
 
@@ -73,9 +73,9 @@ namespace Pulsar
 		m_modules.push_back(&module);
 	}
 
-	void TestSuite::Run()
+	int TestSuite::Run()
 	{
-		Logger().Log(MakeLogLevel(TestLogLevel::Step, TestLogLevel::Suite),
+		Logger().Log(MakeLogLevel(TestLogLevel::SuiteStep),
 			"Start Test Suite ", m_name);
 
 		for (TestModule* module : m_modules)
@@ -85,11 +85,13 @@ namespace Pulsar
 			m_failureCount += module->m_failureCount;
 		}
 
-		Logger().Log(MakeLogLevel(TestLogLevel::Step, TestLogLevel::Suite),
+		Logger().Log(MakeLogLevel(TestLogLevel::SuiteStep),
 			"End Test Suite ", m_name);
 
-		Logger().Log(MakeLogLevel(TestLogLevel::Result, TestLogLevel::Suite),
+		Logger().Log(MakeLogLevel(TestLogLevel::SuiteResult),
 			"Suite ", m_name, " result : ", m_failureCount, " tests failed out of ", m_testCount, " total tests");
+
+		return m_failureCount;
 	}
 
 	Logger& TestSuite::Logger()
