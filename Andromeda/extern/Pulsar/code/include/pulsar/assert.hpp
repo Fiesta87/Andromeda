@@ -2,12 +2,25 @@
 
 #include <pulsar/logger.hpp>
 
+#include <stdexcept>
 #include <iostream>
 #include <ctime>
 #include <iomanip>
 #include <sstream>
 
-#define PULSAR_ASSERT(condition, ...) Pulsar::assertModule.Assert(condition, #condition, " : ", __VA_ARGS__)
+#define PULSAR_ASSERT(condition, ...) \
+if(!condition)\
+{\
+	Pulsar::g_assertLogger.LogCritical(#condition, " : ", __VA_ARGS__);\
+	throw std::runtime_error("Assert fail.");\
+}
+
+#define PULSAR_SOFTASSERT(condition, ...) \
+if(!condition)\
+{\
+	Pulsar::g_assertLogger.LogWarning(#condition, " : ", __VA_ARGS__);\
+	__debugbreak();\
+}
 
 namespace Pulsar
 {
@@ -17,29 +30,22 @@ namespace Pulsar
 		outputStream << std::put_time(std::localtime(&t), "%d-%m-%Y.%X") << " Assert Fail : " << buffer.str() << std::endl;
 	}
 
-	class AssertModule
+	void SoftAssertLogPrinter(std::ostream& outputStream, std::ostringstream& buffer)
 	{
-	public:
+		std::time_t t = std::time(nullptr);
+		outputStream << std::put_time(std::localtime(&t), "%d-%m-%Y.%X") << " Soft Assert Fail : " << buffer.str() << std::endl;
+	}
 
-		AssertModule()
+	Logger g_assertLogger;
+
+	struct AssertInitializer
+	{
+		AssertInitializer()
 		{
-			m_logger.AddOutputStream(std::cerr, LogLevel::All, &AssertLogPrinter);
+			g_assertLogger.AddOutputStream(std::cerr, LogLevel::Critical, &AssertLogPrinter);
+			g_assertLogger.AddOutputStream(std::cerr, LogLevel::Warning, &SoftAssertLogPrinter);
 		}
-
-		template<typename... Printables>
-		void Assert(bool condition, Printables... printables)
-		{
-			if (!condition)
-			{
-				m_logger.Log(printables...);
-				__debugbreak();
-			}
-		}
-
-	private:
-
-		Logger m_logger;
 	};
 
-	AssertModule assertModule;
+	AssertInitializer g_AssertInitializer;
 }
