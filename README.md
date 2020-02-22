@@ -1,7 +1,7 @@
 Andromeda Project
 =================
 
-Andromeda project goal is to provide a cloud gaming native game engine.
+Andromeda project goal is to create a simple game engine using Vulkan.
 
 Setup
 -----
@@ -24,7 +24,7 @@ You can find here :
 
 * __Photon__
 
-The graphics engine.
+The Vulkan graphics engine. Not started for now.
 
 * __Pulsar__
 
