@@ -9,43 +9,49 @@
 #include <sstream>
 
 #define PULSAR_ASSERT(condition, ...) \
-if(!condition)\
+if(!(condition))\
 {\
-	Pulsar::g_assertLogger.LogCritical(#condition, " : ", __VA_ARGS__);\
+	Pulsar::Assert::Logger().LogCritical(#condition, " : ", __VA_ARGS__);\
 	throw std::runtime_error("Assert fail.");\
 }
 
 #define PULSAR_SOFTASSERT(condition, ...) \
-if(!condition)\
+if(!(condition))\
 {\
-	Pulsar::g_assertLogger.LogWarning(#condition, " : ", __VA_ARGS__);\
+	Pulsar::Assert::Logger().LogWarning(#condition, " : ", __VA_ARGS__);\
 	__debugbreak();\
 }
 
 namespace Pulsar
 {
-	void AssertLogPrinter(std::ostream& outputStream, std::ostringstream& buffer)
+	class Assert
 	{
-		std::time_t t = std::time(nullptr);
-		outputStream << std::put_time(std::localtime(&t), "%d-%m-%Y.%X") << " Assert Fail : " << buffer.str() << std::endl;
-	}
-
-	void SoftAssertLogPrinter(std::ostream& outputStream, std::ostringstream& buffer)
-	{
-		std::time_t t = std::time(nullptr);
-		outputStream << std::put_time(std::localtime(&t), "%d-%m-%Y.%X") << " Soft Assert Fail : " << buffer.str() << std::endl;
-	}
-
-	Logger g_assertLogger;
-
-	struct AssertInitializer
-	{
-		AssertInitializer()
+	public:
+		static Logger& Logger()
 		{
-			g_assertLogger.AddOutputStream(std::cerr, LogLevel::Critical, &AssertLogPrinter);
-			g_assertLogger.AddOutputStream(std::cerr, LogLevel::Warning, &SoftAssertLogPrinter);
+			static Pulsar::Logger logger;
+			static bool initilized = false;
+			if (!initilized)
+			{
+				//logger.AddOutputStream(std::cerr, LogLevel::Critical, [](std::ostream& outputStream, std::ostringstream& buffer) {Assert::AssertLogPrinter(outputStream, buffer); });
+				logger.AddOutputStream(std::cerr, LogLevel::Critical, &Assert::AssertLogPrinter);
+				logger.AddOutputStream(std::cerr, LogLevel::Warning, &Assert::SoftAssertLogPrinter);
+				initilized = true;
+			}
+			return logger;
 		}
-	};
 
-	AssertInitializer g_AssertInitializer;
+		static void AssertLogPrinter(std::ostream& outputStream, std::ostringstream& buffer)
+		{
+			std::time_t t = std::time(nullptr);
+			outputStream << std::put_time(std::localtime(&t), "%d-%m-%Y.%X") << " Assert Fail : " << buffer.str() << std::endl;
+		}
+
+		static void SoftAssertLogPrinter(std::ostream& outputStream, std::ostringstream& buffer)
+		{
+			std::time_t t = std::time(nullptr);
+			outputStream << std::put_time(std::localtime(&t), "%d-%m-%Y.%X") << " Soft Assert Fail : " << buffer.str() << std::endl;
+		}
+		
+	};
 }

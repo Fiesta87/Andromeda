@@ -16,11 +16,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # set the list of sources files to build
 set(CMVAR_SRCFILES
-	"${CMVAR_DIR_SRC}/andromeda.cpp"
+	"${CMVAR_DIR_SRC}/andromeda/config.cpp"
+	"${CMVAR_DIR_SRC}/andromeda/engine.cpp"
+	"${CMVAR_DIR_SRC}/andromeda/world.cpp"
 	)
 
 # add extern references
 add_subdirectory("${CMVAR_DIR_EXTERN}/Pulsar/cmake" "${CMVAR_DIR_EXTERN}/Pulsar/cmake/out")
+add_subdirectory("${CMVAR_DIR_EXTERN}/Photon/cmake" "${CMVAR_DIR_EXTERN}/Photon/cmake/out")
 add_subdirectory("${CMVAR_DIR_EXTERN}/Carbon/cmake" "${CMVAR_DIR_EXTERN}/Carbon/cmake/out")
 
 # define static lib as output
@@ -31,4 +34,5 @@ target_include_directories(Andromeda PUBLIC ${CMVAR_DIR_INCLUDE})
 
 # dependencies
 target_link_libraries(Andromeda Pulsar)
+target_link_libraries(Andromeda Photon)
 target_link_libraries(Andromeda Carbon)

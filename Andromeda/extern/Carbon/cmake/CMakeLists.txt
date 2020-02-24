@@ -15,10 +15,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # set the list of sources files to build
 set(CMVAR_SRCFILES
-	"${CMVAR_DIR_SRC}/vector3.cpp"
-	"${CMVAR_DIR_SRC}/matrix3x4.cpp"
-	"${CMVAR_DIR_SRC}/quaternion.cpp"
-	"${CMVAR_DIR_SRC}/transform.cpp"
+	"${CMVAR_DIR_SRC}/carbon/vector3.cpp"
+	"${CMVAR_DIR_SRC}/carbon/matrix3x4.cpp"
+	"${CMVAR_DIR_SRC}/carbon/quaternion.cpp"
+	"${CMVAR_DIR_SRC}/carbon/transform.cpp"
 	)
 
 # define static lib as output

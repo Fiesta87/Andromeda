@@ -1,9 +1,0 @@
-#pragma once
-
-#define CARBON_VERSION_MAJOR	1
-#define CARBON_VERSION_MINOR	0
-#define CARBON_VERSION_PATCH	0
-
-#define MATH_EPSILON 0.001f
-#define RAD_TO_DEG 57.2958f
-#define DEG_TO_RAD 0.0174533f
